@@ -1,0 +1,48 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  --color-brand-bg: #050505;
+  --color-brand-surface: #111111;
+  --color-brand-surface-hover: #1a1a1a;
+  --color-brand-primary: #38bdf8;
+  --color-brand-accent: #818cf8;
+  --color-brand-text: #f8fafc;
+  --color-brand-muted: #94a3b8;
+  --color-brand-border: #262626;
+
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-bg text-brand-text font-sans antialiased m-0 selection:bg-brand-primary/30;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-brand-surface/60 backdrop-blur-md border border-white/5 shadow-xl;
+  }
+  .glass-card {
+    @apply bg-brand-surface/40 backdrop-blur-sm border border-white/5 shadow-lg transition-all hover:bg-brand-surface/60 hover:border-white/10;
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-accent;
+  }
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-brand-primary/50 focus:ring-offset-2 focus:ring-offset-brand-bg;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-brand-border rounded-full hover:bg-brand-muted/50;
+}

@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/data.ts","./src/main.tsx","./src/store.ts","./src/components/bossbattle.tsx","./src/components/openworld.tsx","./src/components/strategymode.tsx","./src/components/terminallogs.tsx","./src/components/tutorial.tsx"],"checkPending":true,"version":"6.0.3"}

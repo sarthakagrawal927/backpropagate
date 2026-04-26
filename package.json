@@ -8,10 +8,14 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "pnpm build && wrangler pages deploy dist/ --project-name=backpropagate"
+    "deploy": "pnpm build && wrangler pages deploy dist/ --project-name=backpropagate",
+    "prepare": "husky"
   },
   "dependencies": {
     "@react-three/drei": "10.7.7",
+    "@saas-maker/changelog-widget": "^0.2.1",
+    "@saas-maker/feedback": "^0.2.1",
+    "@saas-maker/testimonials": "^0.2.1",
     "@react-three/fiber": "9.6.0",
     "@tailwindcss/postcss": "4",
     "@types/three": "0.184.0",
@@ -36,6 +40,7 @@
     "@types/react-dom": "19",
     "@vitejs/plugin-react": "6.0.1",
     "eslint": "10.2.1",
+    "husky": "^9.1.7",
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.2",
     "globals": "17.5.0",

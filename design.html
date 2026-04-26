@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BACKPROPAGATE // NEURAL TERMINAL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#006c49",
+                        "tertiary-fixed": "#ffdad7",
+                        "surface-bright": "#31394d",
+                        "primary-fixed-dim": "#4edea3",
+                        "on-tertiary": "#650911",
+                        "on-primary": "#003824",
+                        "tertiary-fixed-dim": "#ffb3af",
+                        "primary-fixed": "#6ffbbe",
+                        "tertiary": "#ffb3af",
+                        "surface-container-lowest": "#060e20",
+                        "on-tertiary-fixed": "#410005",
+                        "on-tertiary-container": "#711419",
+                        "on-secondary-fixed": "#002113",
+                        "error": "#ffb4ab",
+                        "surface-container-highest": "#2d3449",
+                        "on-secondary-fixed-variant": "#1e4f3a",
+                        "inverse-surface": "#dae2fd",
+                        "error-container": "#93000a",
+                        "secondary": "#9ed2b5",
+                        "on-tertiary-fixed-variant": "#842225",
+                        "secondary-container": "#21523c",
+                        "surface-container-high": "#222a3d",
+                        "surface-variant": "#2d3449",
+                        "on-surface": "#dae2fd",
+                        "on-error-container": "#ffdad6",
+                        "primary": "#4edea3",
+                        "surface-container-low": "#131b2e",
+                        "on-surface-variant": "#bbcabf",
+                        "surface": "#0b1326",
+                        "background": "#0b1326",
+                        "on-primary-fixed-variant": "#005236",
+                        "tertiary-container": "#fc7c78",
+                        "secondary-fixed": "#baeed1",
+                        "on-primary-container": "#00422b",
+                        "secondary-fixed-dim": "#9ed2b5",
+                        "on-secondary": "#013824",
+                        "surface-dim": "#0b1326",
+                        "on-error": "#690005",
+                        "surface-tint": "#4edea3",
+                        "surface-container": "#171f33",
+                        "outline": "#86948a",
+                        "on-primary-fixed": "#002113",
+                        "on-background": "#dae2fd",
+                        "inverse-on-surface": "#283044",
+                        "primary-container": "#10b981",
+                        "outline-variant": "#3c4a42",
+                        "on-secondary-container": "#91c4a8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "display": ["Space Grotesk"],
+                        "body": ["Space Grotesk"],
+                        "label": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0b1326;
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 2px);
+        }
+        .scanline-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+        .tactical-grid {
+            background-image: radial-gradient(#3c4a42 0.5px, transparent 0.5px);
+            background-size: 40px 40px;
+            opacity: 0.1;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col">
+<div class="scanline-overlay"></div>
+<div class="tactical-grid fixed inset-0 pointer-events-none"></div>
+<!-- TopAppBar -->
+<header class="bg-[#0b1326]/80 backdrop-blur-xl rounded-none w-full sticky top-0 z-50 flex justify-between items-center px-6 py-4 w-full shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#4edea3]" data-icon="terminal">terminal</span>
+<span class="font-['Space_Grotesk'] tracking-tighter uppercase font-bold text-xl font-black text-[#4edea3] drop-shadow-[0_0_8px_#10b981]">BACKPROPAGATE</span>
+</div>
+<div class="hidden md:flex gap-8 items-center">
+<nav class="flex gap-6">
+<a class="text-[#4edea3] font-bold font-['Space_Grotesk'] tracking-tighter uppercase text-sm" href="#">OVERWATCH</a>
+<a class="text-[#bbcabf] font-['Space_Grotesk'] tracking-tighter uppercase text-sm hover:text-[#4edea3] transition-colors" href="#">LOGISTICS</a>
+<a class="text-[#bbcabf] font-['Space_Grotesk'] tracking-tighter uppercase text-sm hover:text-[#4edea3] transition-colors" href="#">TACTICAL</a>
+</nav>
+<button class="bg-[#10b981] text-[#0b1326] px-4 py-1.5 font-bold text-xs uppercase tracking-widest hover:bg-[#4edea3] transition-all">ESTABLISH LINK</button>
+</div>
+<div class="md:hidden">
+<span class="material-symbols-outlined text-[#4edea3]" data-icon="menu">menu</span>
+</div>
+</header>
+<main class="flex-grow">
+<!-- Hero Section -->
+<section class="relative min-h-[751px] flex flex-col justify-center items-center px-6 overflow-hidden">
+<div class="absolute inset-0 z-0 opacity-20">
+<div class="w-full h-full bg-cover bg-center" data-alt="digital abstraction of emerald green data lines and neural network connections on a dark circuit board background" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAL3SlB7CMf-449ajOzo0VY3Ub5n_olEHLyRA4ye8C-I7EKHN1-uoexW3DwRVYWZA3DLIi300kOZaeNEQ1R368n2073zwsQCPUDKX3ivn-4ngto9uTyLyFlJMQgpPLfWoHSlANo4ZT6pMN2-IqLQW_g9ibALIu1sj70HtxPEBGksSyIvmRcyhuDZHpPGeiDJv-GvRjYxGitoCuV5AUHdp52G4Hrh68Rc72e_uCcqk4bApxhJ-tCjbZp7zHhHn-yIne5F3phuWq4RYsV')"></div>
+<div class="absolute inset-0 bg-gradient-to-b from-surface via-transparent to-surface"></div>
+</div>
+<div class="relative z-10 text-center max-w-4xl">
+<div class="inline-block mb-6 px-3 py-1 bg-secondary-container text-primary font-bold text-[10px] tracking-[0.3em] uppercase">SYSTEM STATUS: NOMINAL</div>
+<h1 class="font-display text-6xl md:text-9xl font-black text-primary tracking-tighter uppercase drop-shadow-[0_0_15px_#10b981] mb-4">
+                    BACKPROPAGATE
+                </h1>
+<p class="font-body text-on-surface-variant text-lg md:text-xl max-w-2xl mx-auto mb-10 tracking-wide uppercase font-light leading-relaxed">
+                    Recursive deep-learning combat protocols. <br/>
+<span class="text-primary/70">Neural synchronization required for active theater deployment.</span>
+</p>
+<div class="flex flex-col md:flex-row gap-4 justify-center">
+<button class="bg-primary-container text-on-primary px-10 py-4 font-bold text-sm tracking-[0.2em] uppercase hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all flex items-center justify-center gap-3 group">
+                        INITIATE BREACH
+                        <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="border border-outline-variant/30 hover:border-primary/50 text-primary px-10 py-4 font-bold text-sm tracking-[0.2em] uppercase hover:bg-surface-container-high transition-all flex items-center justify-center gap-3">
+                        TERMINAL ACCESS
+                        <span class="material-symbols-outlined text-sm" data-icon="code">code</span>
+</button>
+</div>
+</div>
+<div class="absolute bottom-10 left-10 hidden md:block">
+<div class="flex items-center gap-4 text-primary/40">
+<div class="h-[1px] w-12 bg-primary/40"></div>
+<span class="text-[10px] tracking-widest font-bold uppercase">LATENCY: 12ms</span>
+</div>
+</div>
+</section>
+<!-- Neural Architectures (Unit Classes) -->
+<section class="py-24 px-6 md:px-12 bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto">
+<div class="flex justify-between items-end mb-12">
+<div>
+<h2 class="text-primary font-black text-3xl uppercase tracking-tighter mb-2">NEURAL ARCHITECTURES</h2>
+<div class="h-1 w-24 bg-primary"></div>
+</div>
+<div class="text-right font-mono text-[10px] text-on-surface-variant tracking-widest">
+                        CATALOG_ID: UNIT_MANIFEST_v8.4
+                    </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-outline-variant/10">
+<!-- Unit 01 -->
+<div class="bg-surface p-8 group hover:bg-surface-container transition-colors relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-9xl text-primary" data-icon="shield">shield</span>
+</div>
+<div class="flex justify-between items-start mb-12">
+<div>
+<div class="bg-primary/10 text-primary text-[10px] px-2 py-1 mb-2 font-bold inline-block uppercase tracking-widest">HEAVY CLASS</div>
+<h3 class="text-4xl font-black text-on-surface tracking-tighter group-hover:text-primary transition-colors">TITAN_V4.X</h3>
+</div>
+<span class="text-on-surface-variant text-[10px] font-bold tracking-widest">MK-IV ARMORED CORE</span>
+</div>
+<div class="space-y-6">
+<div class="flex items-end gap-4">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase w-32 tracking-widest">Power Output</span>
+<div class="flex-grow h-2 bg-surface-container-high relative">
+<div class="absolute top-0 left-0 h-full bg-primary w-[92%]"></div>
+</div>
+<span class="text-[10px] font-bold text-primary">92%</span>
+</div>
+<div class="flex items-end gap-4">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase w-32 tracking-widest">Stealth Level</span>
+<div class="flex-grow h-2 bg-surface-container-high relative">
+<div class="absolute top-0 left-0 h-full bg-primary w-[14%]"></div>
+</div>
+<span class="text-[10px] font-bold text-primary">14%</span>
+</div>
+</div>
+<div class="mt-12 flex items-center justify-between">
+<p class="text-xs text-on-surface-variant leading-relaxed max-w-[70%]">Front-line attrition unit specialized in kinetic redirection and deep-sector suppression.</p>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity" data-icon="info">info</span>
+</div>
+</div>
+<!-- Unit 02 -->
+<div class="bg-surface p-8 group hover:bg-surface-container transition-colors relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-9xl text-primary" data-icon="visibility">visibility</span>
+</div>
+<div class="flex justify-between items-start mb-12">
+<div>
+<div class="bg-primary/10 text-primary text-[10px] px-2 py-1 mb-2 font-bold inline-block uppercase tracking-widest">RECON CLASS</div>
+<h3 class="text-4xl font-black text-on-surface tracking-tighter group-hover:text-primary transition-colors">WRAITH_OS</h3>
+</div>
+<span class="text-on-surface-variant text-[10px] font-bold tracking-widest">GEN-5 INFILTRATOR</span>
+</div>
+<div class="space-y-6">
+<div class="flex items-end gap-4">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase w-32 tracking-widest">Power Output</span>
+<div class="flex-grow h-2 bg-surface-container-high relative">
+<div class="absolute top-0 left-0 h-full bg-primary w-[45%]"></div>
+</div>
+<span class="text-[10px] font-bold text-primary">45%</span>
+</div>
+<div class="flex items-end gap-4">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase w-32 tracking-widest">Stealth Level</span>
+<div class="flex-grow h-2 bg-surface-container-high relative">
+<div class="absolute top-0 left-0 h-full bg-primary w-[98%]"></div>
+</div>
+<span class="text-[10px] font-bold text-primary">98%</span>
+</div>
+</div>
+<div class="mt-12 flex items-center justify-between">
+<p class="text-xs text-on-surface-variant leading-relaxed max-w-[70%]">Low-signature operative optimized for signal interception and structural vulnerability mapping.</p>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity" data-icon="info">info</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Theaters of Operation -->
+<section class="py-24 px-6 md:px-12">
+<div class="max-w-7xl mx-auto">
+<div class="flex items-center gap-6 mb-16">
+<h2 class="text-on-surface font-black text-3xl uppercase tracking-tighter">THEATERS OF OPERATION</h2>
+<div class="h-px flex-grow bg-outline-variant/30"></div>
+<span class="text-primary font-bold text-xs tracking-widest uppercase">SELECT DEPLOYMENT POINT</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+<!-- Mission 01 -->
+<div class="relative group cursor-pointer h-[400px] overflow-hidden">
+<img class="absolute inset-0 w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" data-alt="dramatic wide angle shot of a futuristic data center with pulsing green server lights in a dark industrial space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXLzmUfqK_ftRU8Qrf1owc3Ef6ZYDC66aIUrNQyZLG6Vzl6SiIFZMzfbBluEcAtC66PU7ajbZjqpiujKdCMYgHUhRofiYyCzzgCZiTaADytOPXzZXlzfJ3WSrSWNWBX-6oU8DdNUbz_ywdaHtVXb7dzRLVmZaaixepMlXtLGDUWtCDlksMhif45CNr7Vj185haq9ah52vR_S_1gKYbmqd8cB1SM1A1FMqF-QSeV7aj76Yz1dKGHOZchiHUToQeyJ2JqQxLbCj5O-Jr"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-80"></div>
+<div class="absolute inset-0 p-8 flex flex-col justify-end">
+<div class="flex items-center gap-3 text-primary mb-3">
+<span class="material-symbols-outlined text-sm" data-icon="security" data-weight="fill">security</span>
+<span class="text-[10px] font-bold tracking-[0.3em] uppercase">PRIORITY: OMEGA</span>
+</div>
+<h3 class="text-4xl font-black text-on-surface tracking-tighter uppercase mb-4 group-hover:translate-x-2 transition-transform">OPERATION: SILENT STATIC</h3>
+<div class="flex gap-4">
+<span class="bg-surface-container-high text-on-surface-variant px-3 py-1 text-[10px] font-bold uppercase tracking-widest border border-outline-variant/20">GRID_ID: 809</span>
+<span class="bg-surface-container-high text-on-surface-variant px-3 py-1 text-[10px] font-bold uppercase tracking-widest border border-outline-variant/20">SECTOR_RED</span>
+</div>
+</div>
+<div class="absolute top-0 right-0 p-8">
+<div class="w-12 h-12 flex items-center justify-center bg-primary text-surface group-hover:bg-on-surface transition-colors">
+<span class="material-symbols-outlined font-bold" data-icon="ads_click">ads_click</span>
+</div>
+</div>
+</div>
+<!-- Mission 02 -->
+<div class="relative group cursor-pointer h-[400px] overflow-hidden">
+<img class="absolute inset-0 w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" data-alt="cinematic earth view from space at night showing digital data grids connecting continents with emerald green light streaks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-u96N1jRVR3YSd2R3O2bZtYhb6OsvZuVv9ti6qDtwsPbDNlDio9RN7yG_ImREhJle5eY3CaN_SR2RGWB_lRD8WeZSRUDQ108P4-zT8JU9rx0Yex7IRi6kK_rsgmdaDus_781zoivMdrPqd1NqWuxZKB7GwJ_CWAxrilolZoxWwWSL6idh0uw2vXCOGfFXMhk2W8a0PjEsZMz6sgSLhB-i0T7TWUQVH_kf89lVxNEpuXcuDC2FaU5mhnSIKUUTz2fi67Y_UgvU0OMU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-80"></div>
+<div class="absolute inset-0 p-8 flex flex-col justify-end">
+<div class="flex items-center gap-3 text-primary mb-3">
+<span class="material-symbols-outlined text-sm" data-icon="warning" data-weight="fill">warning</span>
+<span class="text-[10px] font-bold tracking-[0.3em] uppercase">PRIORITY: ALPHA</span>
+</div>
+<h3 class="text-4xl font-black text-on-surface tracking-tighter uppercase mb-4 group-hover:translate-x-2 transition-transform">OPERATION: GRAVITY FALL</h3>
+<div class="flex gap-4">
+<span class="bg-surface-container-high text-on-surface-variant px-3 py-1 text-[10px] font-bold uppercase tracking-widest border border-outline-variant/20">GRID_ID: 242</span>
+<span class="bg-surface-container-high text-on-surface-variant px-3 py-1 text-[10px] font-bold uppercase tracking-widest border border-outline-variant/20">ORBIT_VOID</span>
+</div>
+</div>
+<div class="absolute top-0 right-0 p-8">
+<div class="w-12 h-12 flex items-center justify-center bg-primary text-surface group-hover:bg-on-surface transition-colors">
+<span class="material-symbols-outlined font-bold" data-icon="ads_click">ads_click</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Data Footer Readout -->
+<section class="bg-surface-container-low py-12 px-6 border-t border-outline-variant/10">
+<div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em]">Sync Rate</span>
+<span class="text-2xl font-black text-primary tracking-tighter uppercase">99.9%</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em]">Data Throughput</span>
+<span class="text-2xl font-black text-primary tracking-tighter uppercase">1.4TB/S</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em]">Neural Uplink</span>
+<span class="text-2xl font-black text-primary tracking-tighter uppercase">STABLE</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em]">Active Nodes</span>
+<span class="text-2xl font-black text-primary tracking-tighter uppercase">14,209</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-[#0b1326]/90 backdrop-blur-md rounded-none fixed bottom-0 w-full z-50 flex justify-around items-stretch h-16 shadow-[0_-5px_15px_rgba(16,185,129,0.1)]">
+<a class="flex flex-col items-center justify-center bg-[#10b981] text-[#0b1326] py-3 px-6" href="#">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span class="font-['Space_Grotesk'] text-[10px] tracking-[0.2em] font-bold uppercase">OVERWATCH</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#bbcabf] py-3 px-6 hover:bg-[#131b2e]" href="#">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+<span class="font-['Space_Grotesk'] text-[10px] tracking-[0.2em] font-bold uppercase">LOGISTICS</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#bbcabf] py-3 px-6 hover:bg-[#131b2e]" href="#">
+<span class="material-symbols-outlined" data-icon="precision_manufacturing">precision_manufacturing</span>
+<span class="font-['Space_Grotesk'] text-[10px] tracking-[0.2em] font-bold uppercase">TACTICAL</span>
+</a>
+</nav>
+<footer class="bg-surface py-20 px-6 text-center border-t border-outline-variant/10">
+<div class="mb-10 flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="token">token</span>
+<span class="text-primary font-black tracking-widest text-lg">BACKPROPAGATE OS v2.0.4-STABLE</span>
+</div>
+<p class="text-on-surface-variant text-[10px] font-bold uppercase tracking-[0.5em] max-w-lg mx-auto leading-loose">
+            ALL DATA TRANSMISSIONS ARE ENCRYPTED UNDER MIL-SPEC PROTOCOL 49-X. UNAUTHORIZED ACCESS WILL TRIGGER AUTOMATED RETALIATORY CYBER-MEASURES.
+        </p>
+<div class="mt-12 text-on-surface-variant text-[9px] uppercase tracking-widest opacity-30">
+            © 2104 NEURAL DYNAMICS CORPORATE ENTITY. ALL RIGHTS RESERVED.
+        </div>
+</footer>
+</body></html>

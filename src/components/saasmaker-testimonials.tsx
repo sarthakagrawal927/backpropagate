@@ -1,5 +1,6 @@
-import { TestimonialWall } from "@saas-maker/testimonials";
 import "@saas-maker/testimonials/dist/index.css";
+
+import { TestimonialWall } from "@saas-maker/testimonials";
 
 const API_KEY = import.meta.env.VITE_SAASMAKER_API_KEY ?? "";
 const API_BASE = "https://api.sassmaker.com";

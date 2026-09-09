@@ -1,12 +1,13 @@
 
-import { useGameStore } from './store';
-import { BOSSES, STORY_CHAPTERS } from './data';
-import { ArrowLeft, Shield, Trophy, Skull, RefreshCw, Globe, BookOpen, User, TerminalSquare, AlertTriangle } from 'lucide-react';
+import { AlertTriangle,ArrowLeft, BookOpen, Globe, RefreshCw, Shield, Skull, TerminalSquare, Trophy, User } from 'lucide-react';
+import { useEffect,useState } from 'react';
+
 import { BossBattle } from './components/BossBattle';
 import { OpenWorld } from './components/OpenWorld';
 import { TerminalLogs } from './components/TerminalLogs';
 import { Tutorial } from './components/Tutorial';
-import { useState, useEffect } from 'react';
+import { BOSSES, STORY_CHAPTERS } from './data';
+import { useGameStore } from './store';
 
 const Hub = () => {
   const { startGame, neutralizedBosses } = useGameStore();

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { FeedbackWidget } from "@saas-maker/feedback";
 import "@saas-maker/feedback/dist/index.css";
+
+import { FeedbackWidget } from "@saas-maker/feedback";
+import { useEffect, useState } from "react";
 
 const API_KEY = import.meta.env.VITE_SAASMAKER_API_KEY ?? "";
 const API_BASE = "https://api.sassmaker.com";

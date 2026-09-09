@@ -1,5 +1,6 @@
 
 import { create } from 'zustand';
+
 import type { Boss } from './data';
 
 export interface LogEntry {

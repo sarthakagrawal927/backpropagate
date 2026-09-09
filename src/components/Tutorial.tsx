@@ -1,6 +1,7 @@
 
+import { ChevronRight,MousePointer2 } from 'lucide-react';
+
 import { useGameStore } from '../store';
-import { MousePointer2, ChevronRight } from 'lucide-react';
 
 const STEPS = [
   {

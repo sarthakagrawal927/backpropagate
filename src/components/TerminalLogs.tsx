@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
-import { useGameStore } from '../store';
-import type { LogEntry } from '../store';
 import { TerminalSquare } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+
+import type { LogEntry } from '../store';
+import { useGameStore } from '../store';
 
 export const TerminalLogs = () => {
   const logs = useGameStore((state) => state.logs);

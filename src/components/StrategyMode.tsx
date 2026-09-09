@@ -1,7 +1,8 @@
 
+import { Activity, Lock,Zap } from 'lucide-react';
 import { useEffect } from 'react';
+
 import { useGameStore } from '../store';
-import { Zap, Activity, Lock } from 'lucide-react';
 
 export const StrategyMode = () => {
   const { compute, worldGrid, hackNode, tickSystem, addLog } = useGameStore() as any;

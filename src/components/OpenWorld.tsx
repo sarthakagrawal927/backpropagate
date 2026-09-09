@@ -1,7 +1,8 @@
 
-import { useGameStore } from '../store';
+import { AlertTriangle, Crosshair, Radar,Shield, Target } from 'lucide-react';
+
 import { BOSSES } from '../data';
-import { Shield, Target, AlertTriangle, Crosshair, Radar } from 'lucide-react';
+import { useGameStore } from '../store';
 
 export const OpenWorld = () => {
   const { neutralizedBosses, engageBoss } = useGameStore();

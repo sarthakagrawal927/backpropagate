@@ -1,24 +1,22 @@
 
+import { Activity,Brain, Shield, Sword, Zap } from 'lucide-react';
+import { useEffect,useState } from 'react';
+
 import { useGameStore } from '../store';
-import { Shield, Zap, Sword, Brain, Activity } from 'lucide-react';
-import { useState, useEffect } from 'react';
 
 export const BossBattle = () => {
   const { activeBoss, integrity, compute, strike, fortify, processTurn } = useGameStore();
   const [turn, setTurn] = useState<'PLAYER' | 'BOSS'>('PLAYER');
-  const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
-    if (turn === 'BOSS' && activeBoss && !animating) {
-      setAnimating(true);
+    if (turn === 'BOSS' && activeBoss) {
       const timer = setTimeout(() => {
         processTurn();
         setTurn('PLAYER');
-        setAnimating(false);
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [turn, activeBoss, animating, processTurn]);
+  }, [turn, activeBoss, processTurn]);
 
   if (!activeBoss) return null;
 
